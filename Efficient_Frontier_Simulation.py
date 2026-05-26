@@ -59,6 +59,12 @@ def retrieveHistoricalData(positions):
     
     return historical_price_data
 
+"""
+Calculates the daily return of each position
+"""
+def dailyReturnCalculation(historical_price_data):
+    return (historical_price_data / historical_price_data.shift(1)) - 1
+
 
 if __name__=="__main__":
     main()
