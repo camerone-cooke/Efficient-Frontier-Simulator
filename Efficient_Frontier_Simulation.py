@@ -14,6 +14,8 @@ allocations that maximize the return for a given level of risk.
 import yfinance as yf
 import numpy as np
 
+TRADING_DAYS = 252
+
 """
 Check if number of positions is valid and then run simulation on portfolio.
 """
@@ -66,6 +68,16 @@ def dailyReturnCalculation(historical_price_data):
     return (historical_price_data / historical_price_data.shift(1)) - 1
 
 """
+Calculates the annualized return of each position. This is calculated by taking
+the 10 year compound annual growth rate (CAGR).
+"""
+def annualizedReturnCalculation(historical_price_data):
+    change = (historical_price_data.iloc[-1] / historical_price_data.iloc[0])
+    annualization_factor = (1 / ((len(historical_price_data) - 1) / TRADING_DAYS))
+    annualized_return = (change ** annualization_factor) - 1
+    return annualized_return
+
+"""
 Correlation measures the degree to which two equities move in lock-step with one
 another. Their correlation value can range from -1.0 (inversely correlated) to
 1.0 (positively correlated). The correlation matrix is calculated by taking
@@ -77,6 +89,7 @@ def correlationCalculation(historical_price_data):
     cleaned_returns = simple_returns.dropna()
     corr_matrix = np.array(cleaned_returns.corr())
     return corr_matrix
+
 
 if __name__=="__main__":
     main()
