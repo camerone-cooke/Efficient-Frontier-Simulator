@@ -65,6 +65,13 @@ Calculates the daily return of each position
 def dailyReturnCalculation(historical_price_data):
     return (historical_price_data / historical_price_data.shift(1)) - 1
 
+"""
+Correlation measures the degree to which two equities move in lock-step with one
+another. Their correlation value can range from -1.0 (inversely correlated) to
+1.0 (positively correlated). The correlation matrix is calculated by taking
+simple returns of each equity in the portfolio and computing the pairwise
+correlation coefficients between all equity pairs.
+"""
 def correlationCalculation(historical_price_data):
     simple_returns = dailyReturnCalculation(historical_price_data)
     cleaned_returns = simple_returns.dropna()
