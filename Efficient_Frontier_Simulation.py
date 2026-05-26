@@ -65,7 +65,9 @@ def retrieveHistoricalData(positions):
 Calculates the daily return of each position
 """
 def dailyReturnCalculation(historical_price_data):
-    return (historical_price_data / historical_price_data.shift(1)) - 1
+    simple_returns = (historical_price_data / historical_price_data.shift(1)) - 1
+    cleaned_returns = simple_returns.dropna()
+    return cleaned_returns
 
 """
 Calculates the annualized return of each position. This is calculated by taking
