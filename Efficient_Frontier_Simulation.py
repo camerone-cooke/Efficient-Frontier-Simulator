@@ -65,6 +65,11 @@ Calculates the daily return of each position
 def dailyReturnCalculation(historical_price_data):
     return (historical_price_data / historical_price_data.shift(1)) - 1
 
+def correlationCalculation(historical_price_data):
+    simple_returns = dailyReturnCalculation(historical_price_data)
+    cleaned_returns = simple_returns.dropna()
+    corr_matrix = np.array(cleaned_returns.corr())
+    return corr_matrix
 
 if __name__=="__main__":
     main()
