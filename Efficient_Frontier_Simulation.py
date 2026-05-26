@@ -11,6 +11,7 @@ allocations that maximize the return for a given level of risk.
 """
 
 # import needed libraries
+import yfinance as yf
 import numpy as np
 
 """
@@ -21,7 +22,7 @@ def main():
     if (len(positions) < 1):
         print("No positions given")
     else:
-        return
+        historical_price_data = retrieveHistoricalData(positions)
 
 """
 Prompt user for positions in portfolio.
@@ -41,6 +42,22 @@ def getPortfolio():
                     'or \'quit\' to stop: ').upper()
         
     return positions
+
+"""
+Retrieves historical data from positions in portfolio.
+"""
+def retrieveHistoricalData(positions):
+    # use yf.download instead of yf.Ticker (for a single ticker) or yf.Tickers 
+    # (for multiple tickers) due to being more efficient (uses multi-threading)
+
+    # retrieve data for all positions at one time and place in dataframe
+    historical_price_data = yf.download(
+        positions.tolist(), 
+        period="10y", 
+        auto_adjust=True
+        )["Close"]
+    
+    return historical_price_data
 
 
 if __name__=="__main__":
