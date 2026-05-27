@@ -76,8 +76,16 @@ the 10 year compound annual growth rate (CAGR).
 def annualizedReturnCalculation(historical_price_data):
     change = (historical_price_data.iloc[-1] / historical_price_data.iloc[0])
     annualization_factor = (1 / ((len(historical_price_data) - 1) / TRADING_DAYS))
-    annualized_return = (change ** annualization_factor) - 1
-    return annualized_return
+    annualized_returns = (change ** annualization_factor) - 1
+    return annualized_returns
+
+"""
+Calculates the annualized volatility of each position.
+"""
+def volatilityCalculation(simple_returns):
+    standard_deviation = simple_returns.std()
+    sigma = standard_deviation * np.sqrt(TRADING_DAYS)
+    return sigma
 
 """
 Correlation measures the degree to which two equities move in lock-step with one
