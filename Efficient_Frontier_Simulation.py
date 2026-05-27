@@ -94,8 +94,7 @@ another. Their correlation value can range from -1.0 (inversely correlated) to
 simple returns of each equity in the portfolio and computing the pairwise
 correlation coefficients between all equity pairs.
 """
-def correlationCalculation(historical_price_data):
-    simple_returns = dailyReturnCalculation(historical_price_data)
+def correlationCalculation(simple_returns):
     corr_matrix = np.array(simple_returns.corr())
     return corr_matrix
 
