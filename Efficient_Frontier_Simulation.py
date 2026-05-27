@@ -25,6 +25,7 @@ def main():
         print("No positions given")
     else:
         historical_price_data = retrieveHistoricalData(positions)
+        annualized_return, cov_matrix, rf = MCSInputs(historical_price_data)
         annualized_return, cov_matrix = MCSInputs(historical_price_data)
 
 """
@@ -120,6 +121,9 @@ def MCSInputs(historical_price_data):
     sigma = volatilityCalculation(simple_returns)
     corr_matrix = correlationCalculation(simple_returns)
     cov_matrix = covarianceCalculation(sigma, corr_matrix)
+    rf = (yf.download("^TNX", period="5d")["Close"].iloc[-1]) / 100
+
+    return annualized_return, cov_matrix, rf
 
     return annualized_return, cov_matrix
 
