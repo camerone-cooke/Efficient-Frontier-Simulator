@@ -213,11 +213,13 @@ def displayMCS(positions, corr_matrix, cov_matrix, randomized_weights, mcs_resul
     bottom_left.set_ylabel("Return")
 
     # display portfolio with highest sharpe and its metrics
+    # get metrics of highest sharpe portfolio
     index_highest_sharpe = np.argmax(mcs_results[:, 2])
     weights = randomized_weights[index_highest_sharpe]
     portfolio_return = mcs_results[index_highest_sharpe, 0]
     volatility = mcs_results[index_highest_sharpe, 1]
     sharpe = mcs_results[index_highest_sharpe, 2]
+    # compile metrics to formated text
     portfolio_metrics = (
         f"Return: {portfolio_return:.2%}\n" # display return of portfolio
         f"Volatility: {volatility:.2%}\n" # display volatility of portfolio
@@ -227,6 +229,7 @@ def displayMCS(positions, corr_matrix, cov_matrix, randomized_weights, mcs_resul
         "\n".join([f"{positions[i]}: {weights[i]:.2%}"
                     for i in range(0, len(positions))])
     )
+    # format text box and text
     top_left.text(
         0, 
         1, 
