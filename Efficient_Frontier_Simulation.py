@@ -212,6 +212,12 @@ def displayMCS(positions, corr_matrix, cov_matrix, randomized_weights, mcs_resul
     bottom_left.set_xlabel("Volatility")
     bottom_left.set_ylabel("Return")
 
+    # add label for highest sharpe portfolio text box
+    top_left.text(0.10, 1, "Highest Sharpe", fontsize=14)
+
+    # add label for minimum variance portfolio text box
+    top_left.text(0.60, 1, "Minimum Variance", fontsize=14)
+
     # display portfolio with highest sharpe and its metrics
     # get metrics of highest sharpe portfolio
     index_highest_sharpe = np.argmax(mcs_results[:, 2])
@@ -232,7 +238,7 @@ def displayMCS(positions, corr_matrix, cov_matrix, randomized_weights, mcs_resul
     # format text box and text
     top_left.text(
         0.025, 
-        0.975, 
+        0.96, 
         portfolio_metrics, # text to display
         fontsize=20, 
         verticalalignment='top',
@@ -274,7 +280,7 @@ def displayMCS(positions, corr_matrix, cov_matrix, randomized_weights, mcs_resul
     # format text box and text
     top_left.text(
         0.55, 
-        0.975, 
+        0.96, 
         portfolio_metrics, # text to display
         fontsize=20, 
         verticalalignment='top',
