@@ -15,6 +15,7 @@ import yfinance as yf
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
+import mplcursors
 
 TRADING_DAYS = 252
 SIMULATIONS = 100000
@@ -234,6 +235,40 @@ def displayMCS(positions, corr_matrix, cov_matrix, randomized_weights, mcs_resul
         ax=bottom_right
         )
     bottom_right.set_title("Covariance Matrix", fontsize=14)
+
+    # adding mplcursors functionality so hovering over portfolio shows details
+    cursor = mplcursors.cursor(scatter, hover=True)
+
+    # connect hover event
+    @cursor.connect("add")
+    # when hover event
+    def on_add(selected_portfolio):
+        # get index of portfolio and determine portfolio metrics
+        index = selected_portfolio.index
+        weights = randomized_weights[index]
+        portfolio_return = mcs_results[index, 0]
+        volatility = mcs_results[index, 1]
+        sharpe = mcs_results[index, 2]
+
+        # display annotation on portfolio
+        selected_portfolio.annotation.set_text(
+            f"Return: {portfolio_return:.2%}\n" # display return of portfolio
+            f"Volatility: {volatility:.2%}\n" # display volatility of portfolio
+            f"Sharpe: {sharpe:.2}\n\n" # display sharpe of portfolio
+            "Position Weights:\n" # display weight of each position in portfolio
+            "--------------------\n" +
+            "\n".join([f"{positions[i]}: {weights[i]:.2%}"
+                       for i in range(0, len(positions))])
+        )
+
+        # format annotation box
+        selected_portfolio.annotation.get_bbox_patch().set(
+            facecolor='white', 
+            alpha=0.8
+            )
+        
+        # format annotation text
+        selected_portfolio.annotation.set_color('black')
 
     plt.show()
 
