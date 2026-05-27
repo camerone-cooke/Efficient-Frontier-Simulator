@@ -15,6 +15,7 @@ import yfinance as yf
 import numpy as np
 
 TRADING_DAYS = 252
+SIMULATIONS = 10000
 
 """
 Check if number of positions is valid and then run simulation on portfolio.
@@ -26,7 +27,12 @@ def main():
     else:
         historical_price_data = retrieveHistoricalData(positions)
         annualized_return, cov_matrix, rf = MCSInputs(historical_price_data)
-        annualized_return, cov_matrix = MCSInputs(historical_price_data)
+        randomized_weights, mcs_results = monteCarloSimulation(
+            positions, 
+            annualized_return, 
+            cov_matrix,
+            rf
+            )
 
 """
 Prompt user for positions in portfolio.
@@ -125,8 +131,27 @@ def MCSInputs(historical_price_data):
 
     return annualized_return, cov_matrix, rf
 
-    return annualized_return, cov_matrix
+"""
+Monte Carlo simulation performed by generating a large number of portfolios
+through randomized position weight combinations. For each simulation, random 
+numbers are generated for each position and then normalized to sum to 1 in order
+to make sure all capital is utilized and there are no short positions. The
+return, volatility, and Sharpe ratio of the portfolio are then calculated based
+on each weight combination.
+"""
+def monteCarloSimulation(positions, annualized_return, cov_matrix, rf):
+    random_nums = np.random.random((SIMULATIONS, len(positions)))
+    weight_sums = np.sum(random_nums, axis=1)
+    randomized_weights = random_nums / weight_sums.reshape(SIMULATIONS, 1)
 
+    portfolio_return = np.dot(randomized_weights, np.array(annualized_return))
+    variance = np.array([w @ cov_matrix @ w for w in randomized_weights])
+    volatility = np.sqrt(variance)
+    sharpe = (portfolio_return - rf) / volatility
+
+    mcs_results = np.column_stack([portfolio_return, volatility, sharpe])
+
+    return randomized_weights, mcs_results
 
 if __name__=="__main__":
     main()
