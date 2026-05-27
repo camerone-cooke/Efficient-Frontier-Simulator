@@ -96,8 +96,7 @@ correlation coefficients between all equity pairs.
 """
 def correlationCalculation(historical_price_data):
     simple_returns = dailyReturnCalculation(historical_price_data)
-    cleaned_returns = simple_returns.dropna()
-    corr_matrix = np.array(cleaned_returns.corr())
+    corr_matrix = np.array(simple_returns.corr())
     return corr_matrix
 
 
