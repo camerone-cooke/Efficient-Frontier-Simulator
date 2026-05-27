@@ -21,15 +21,19 @@ SIMULATIONS = 10000
 Check if number of positions is valid and then run simulation on portfolio.
 """
 def main():
+    # get positions in portfolio from user
     positions = getPortfolio()
+
+    # catch if there is no positions given
     if (len(positions) < 1):
         print("No positions given")
     else:
+        # get historical data and run simulation
         historical_price_data = retrieveHistoricalData(positions)
-        annualized_return, cov_matrix, rf = MCSInputs(historical_price_data)
+        annualized_returns, cov_matrix, rf = MCSInputs(historical_price_data)
         randomized_weights, mcs_results = monteCarloSimulation(
             positions, 
-            annualized_return, 
+            annualized_returns, 
             cov_matrix,
             rf
             )
@@ -73,6 +77,7 @@ def retrieveHistoricalData(positions):
 Calculates the daily return of each position
 """
 def dailyReturnCalculation(historical_price_data):
+    # calculate simple returns for each day and clean (first day will be NaN)
     simple_returns = (historical_price_data / historical_price_data.shift(1)) - 1
     cleaned_returns = simple_returns.dropna()
     return cleaned_returns
@@ -82,6 +87,7 @@ Calculates the annualized return of each position. This is calculated by taking
 the 10 year compound annual growth rate (CAGR).
 """
 def annualizedReturnCalculation(historical_price_data):
+    # calculate the change and the factor, return annualized returns
     change = (historical_price_data.iloc[-1] / historical_price_data.iloc[0])
     annualization_factor = (1 / ((len(historical_price_data) - 1) / TRADING_DAYS))
     annualized_returns = (change ** annualization_factor) - 1
@@ -91,7 +97,10 @@ def annualizedReturnCalculation(historical_price_data):
 Calculates the annualized volatility of each position.
 """
 def volatilityCalculation(simple_returns):
+    # get the standard deviation of simple daily returns
     standard_deviation = simple_returns.std()
+
+    # annualize the standard deviation to get the annualized volatility
     sigma = standard_deviation * np.sqrt(TRADING_DAYS)
     return sigma
 
@@ -103,6 +112,7 @@ simple returns of each equity in the portfolio and computing the pairwise
 correlation coefficients between all equity pairs.
 """
 def correlationCalculation(simple_returns):
+    # calculate the correlation of each asset pair
     corr_matrix = np.array(simple_returns.corr())
     return corr_matrix
 
@@ -115,6 +125,7 @@ covariance near zero. The covariance matrix is simply the correlation matrix
 scaled by the volatilities of each asset pair.
 """
 def covarianceCalculation(sigma, corr_matrix):
+    # multiply the correlation matrix by the vector of volatilities
     cov_matrix = np.outer(sigma, sigma) * corr_matrix
     return cov_matrix
 
@@ -122,7 +133,7 @@ def covarianceCalculation(sigma, corr_matrix):
 This function calculates all needed inputs for Monte Carlo simulation.
 """
 def MCSInputs(historical_price_data):
-    annualized_return = annualizedReturnCalculation(historical_price_data)
+    annualized_returns = annualizedReturnCalculation(historical_price_data)
     simple_returns = dailyReturnCalculation(historical_price_data)
     sigma = volatilityCalculation(simple_returns)
     corr_matrix = correlationCalculation(simple_returns)
@@ -130,7 +141,7 @@ def MCSInputs(historical_price_data):
     rf = (yf.download("^TNX", period="5d", auto_adjust=True)["Close"].iloc[-1]) / 100
     rf = float(rf.iloc[0])
 
-    return annualized_return, cov_matrix, rf
+    return annualized_returns, cov_matrix, rf
 
 """
 Monte Carlo simulation performed by generating a large number of portfolios
@@ -140,16 +151,24 @@ to make sure all capital is utilized and there are no short positions. The
 return, volatility, and Sharpe ratio of the portfolio are then calculated based
 on each weight combination.
 """
-def monteCarloSimulation(positions, annualized_return, cov_matrix, rf):
+def monteCarloSimulation(positions, annualized_returns, cov_matrix, rf):
+    # create array to house randomly generated numbers
     random_nums = np.random.random((SIMULATIONS, len(positions)))
+    # sum each simulations random numbers
     weight_sums = np.sum(random_nums, axis=1)
+    # divide each random number by the sum of the simulation to get the weight
     randomized_weights = random_nums / weight_sums.reshape(SIMULATIONS, 1)
 
-    portfolio_return = randomized_weights @ np.array(annualized_return)
+    # calculate the return by weighting the annualized returns of each position
+    portfolio_return = randomized_weights @ np.array(annualized_returns)
+    # calculate the variance by applying each weight vector to the covariance
     variance = np.array([w @ cov_matrix @ w for w in randomized_weights])
     volatility = np.sqrt(variance)
+    # calculate the sharpe of the portfolio
     sharpe = (portfolio_return - rf) / volatility
 
+    # stack the results into one data frame
+    # columns are the portfolio metrics and rows are simulations
     mcs_results = np.column_stack([portfolio_return, volatility, sharpe])
 
     return randomized_weights, mcs_results
