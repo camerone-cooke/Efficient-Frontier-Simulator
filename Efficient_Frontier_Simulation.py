@@ -31,14 +31,20 @@ def main():
     else:
         # get historical data and run simulation
         historical_price_data = retrieveHistoricalData(positions)
-        annualized_returns, cov_matrix, rf = MCSInputs(historical_price_data)
+        annualized_returns, corr_matrix, cov_matrix, rf = MCSInputs(historical_price_data)
         randomized_weights, mcs_results = monteCarloSimulation(
             positions, 
             annualized_returns, 
             cov_matrix,
             rf
             )
-        displayMCS(positions, randomized_weights, mcs_results)
+        displayMCS(
+            positions, 
+            corr_matrix, 
+            cov_matrix, 
+            randomized_weights, 
+            mcs_results
+            )
 
 """
 Prompt user for positions in portfolio.
@@ -143,7 +149,7 @@ def MCSInputs(historical_price_data):
     rf = (yf.download("^TNX", period="5d", auto_adjust=True)["Close"].iloc[-1]) / 100
     rf = float(rf.iloc[0])
 
-    return annualized_returns, cov_matrix, rf
+    return annualized_returns, corr_matrix, cov_matrix, rf
 
 """
 Monte Carlo simulation performed by generating a large number of portfolios
@@ -178,7 +184,7 @@ def monteCarloSimulation(positions, annualized_returns, cov_matrix, rf):
 """
 This function generates the graphical display of the portfolio.
 """
-def displayMCS(positions, randomized_weights, mcs_results):
+def displayMCS(positions, corr_matrix, cov_matrix, randomized_weights, mcs_results):
     # create new figure
     fig = plt.figure(figsize=(15, 10))
     # add title
@@ -200,6 +206,9 @@ def displayMCS(positions, randomized_weights, mcs_results):
         alpha=0.5,
         s=10
     )
+
+    # display asset correlation matrix
+    
 
     plt.show()
 
