@@ -218,7 +218,17 @@ def displayMCS(positions, corr_matrix, cov_matrix, randomized_weights, mcs_resul
         fmt=".2f", 
         ax=top_right
         )
-
+    
+    # display asset covariance matrix
+    sns.heatmap(
+        cov_matrix, # heatmap of correlations
+        annot=True,
+        cmap='coolwarm',
+        xticklabels=positions, # display tickers on x
+        yticklabels=positions, # display tickers on y
+        fmt=".2f", 
+        ax=bottom_right
+        )
 
     plt.show()
 
