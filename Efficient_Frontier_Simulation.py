@@ -248,18 +248,6 @@ def displayMCS(positions, corr_matrix, cov_matrix, randomized_weights, mcs_resul
         bbox=dict(facecolor='#FBE5D6', edgecolor='black', boxstyle='square')
         )
 
-    # display asset correlation matrix
-    sns.heatmap(
-        corr_matrix, # heatmap of correlations
-        annot=True,
-        cmap='RdYlGn',
-        xticklabels=positions, # display tickers on x
-        yticklabels=positions, # display tickers on y
-        fmt=".2f", 
-        ax=top_right
-        )
-    top_right.set_title("Correlation Matrix", fontsize=14)
-
     # display portfolio with lowest variance and its metrics
     # get metrics of lowest variance portfolio
     index_min_variance = np.argmin(mcs_results[:, 1])
