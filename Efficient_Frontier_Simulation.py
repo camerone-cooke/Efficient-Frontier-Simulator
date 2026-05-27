@@ -127,7 +127,8 @@ def MCSInputs(historical_price_data):
     sigma = volatilityCalculation(simple_returns)
     corr_matrix = correlationCalculation(simple_returns)
     cov_matrix = covarianceCalculation(sigma, corr_matrix)
-    rf = (yf.download("^TNX", period="5d")["Close"].iloc[-1]) / 100
+    rf = (yf.download("^TNX", period="5d", auto_adjust=True)["Close"].iloc[-1]) / 100
+    rf = float(rf.iloc[0])
 
     return annualized_return, cov_matrix, rf
 
@@ -144,7 +145,7 @@ def monteCarloSimulation(positions, annualized_return, cov_matrix, rf):
     weight_sums = np.sum(random_nums, axis=1)
     randomized_weights = random_nums / weight_sums.reshape(SIMULATIONS, 1)
 
-    portfolio_return = np.dot(randomized_weights, np.array(annualized_return))
+    portfolio_return = randomized_weights @ np.array(annualized_return)
     variance = np.array([w @ cov_matrix @ w for w in randomized_weights])
     volatility = np.sqrt(variance)
     sharpe = (portfolio_return - rf) / volatility
@@ -152,6 +153,7 @@ def monteCarloSimulation(positions, annualized_return, cov_matrix, rf):
     mcs_results = np.column_stack([portfolio_return, volatility, sharpe])
 
     return randomized_weights, mcs_results
+
 
 if __name__=="__main__":
     main()
