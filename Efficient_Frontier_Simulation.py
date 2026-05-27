@@ -231,8 +231,50 @@ def displayMCS(positions, corr_matrix, cov_matrix, randomized_weights, mcs_resul
     )
     # format text box and text
     top_left.text(
-        0, 
-        1, 
+        0.025, 
+        0.975, 
+        portfolio_metrics, # text to display
+        fontsize=20, 
+        verticalalignment='top',
+        horizontalalignment='left',
+        color='black',
+        linespacing=1.5,
+        bbox=dict(facecolor='#FBE5D6', edgecolor='black', boxstyle='square')
+        )
+
+    # display asset correlation matrix
+    sns.heatmap(
+        corr_matrix, # heatmap of correlations
+        annot=True,
+        cmap='RdYlGn',
+        xticklabels=positions, # display tickers on x
+        yticklabels=positions, # display tickers on y
+        fmt=".2f", 
+        ax=top_right
+        )
+    top_right.set_title("Correlation Matrix", fontsize=14)
+
+    # display portfolio with lowest variance and its metrics
+    # get metrics of lowest variance portfolio
+    index_min_variance = np.argmin(mcs_results[:, 1])
+    weights = randomized_weights[index_min_variance]
+    portfolio_return = mcs_results[index_min_variance, 0]
+    volatility = mcs_results[index_min_variance, 1]
+    sharpe = mcs_results[index_min_variance, 2]
+    # compile metrics to formated text
+    portfolio_metrics = (
+        f"Return: {portfolio_return:.2%}\n" # display return of portfolio
+        f"Volatility: {volatility:.2%}\n" # display volatility of portfolio
+        f"Sharpe: {sharpe:.2}\n\n" # display sharpe of portfolio
+        "Position Weights:\n" # display weight of each position in portfolio
+        "--------------------\n" +
+        "\n".join([f"{positions[i]}: {weights[i]:.2%}"
+                    for i in range(0, len(positions))])
+    )
+    # format text box and text
+    top_left.text(
+        0.55, 
+        0.975, 
         portfolio_metrics, # text to display
         fontsize=20, 
         verticalalignment='top',
