@@ -212,6 +212,33 @@ def displayMCS(positions, corr_matrix, cov_matrix, randomized_weights, mcs_resul
     bottom_left.set_xlabel("Volatility")
     bottom_left.set_ylabel("Return")
 
+    # display portfolio with highest sharpe and its metrics
+    index_highest_sharpe = np.argmax(mcs_results[:, 2])
+    weights = randomized_weights[index_highest_sharpe]
+    portfolio_return = mcs_results[index_highest_sharpe, 0]
+    volatility = mcs_results[index_highest_sharpe, 1]
+    sharpe = mcs_results[index_highest_sharpe, 2]
+    portfolio_metrics = (
+        f"Return: {portfolio_return:.2%}\n" # display return of portfolio
+        f"Volatility: {volatility:.2%}\n" # display volatility of portfolio
+        f"Sharpe: {sharpe:.2}\n\n" # display sharpe of portfolio
+        "Position Weights:\n" # display weight of each position in portfolio
+        "--------------------\n" +
+        "\n".join([f"{positions[i]}: {weights[i]:.2%}"
+                    for i in range(0, len(positions))])
+    )
+    top_left.text(
+        0, 
+        1, 
+        portfolio_metrics, # text to display
+        fontsize=20, 
+        verticalalignment='top',
+        horizontalalignment='left',
+        color='black',
+        linespacing=1.5,
+        bbox=dict(facecolor='#FBE5D6', edgecolor='black', boxstyle='square')
+        )
+
     # display asset correlation matrix
     sns.heatmap(
         corr_matrix, # heatmap of correlations
@@ -264,7 +291,8 @@ def displayMCS(positions, corr_matrix, cov_matrix, randomized_weights, mcs_resul
         # format annotation box
         selected_portfolio.annotation.get_bbox_patch().set(
             facecolor='white', 
-            alpha=0.8
+            alpha=0.8,
+            boxstyle='round'
             )
         
         # format annotation text
