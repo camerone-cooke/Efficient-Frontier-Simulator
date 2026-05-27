@@ -16,7 +16,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 TRADING_DAYS = 252
-SIMULATIONS = 10000
+SIMULATIONS = 100000
 
 """
 Check if number of positions is valid and then run simulation on portfolio.
@@ -190,6 +190,16 @@ def displayMCS(positions, randomized_weights, mcs_results):
     bottom_left = fig.add_axes([0.06, 0.06, 0.40, 0.40])
     top_right = fig.add_axes([0.56, 0.53, 0.40, 0.40])
     bottom_right = fig.add_axes([0.56, 0.06, 0.40, 0.40])
+
+    # displaying efficient frontier
+    scatter = bottom_left.scatter(
+        mcs_results[:, 1], # volatility on x-axis
+        mcs_results[:, 0], # return on y-axis
+        c = mcs_results[:, 2], # color by sharpe ratio
+        cmap='viridis',
+        alpha=0.5,
+        s=10
+    )
 
     plt.show()
 
