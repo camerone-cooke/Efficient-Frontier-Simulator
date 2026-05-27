@@ -99,6 +99,18 @@ def correlationCalculation(historical_price_data):
     corr_matrix = np.array(simple_returns.corr())
     return corr_matrix
 
+"""
+Covariance measures how much two equities move together, accounting for their
+individual volatilities and the correlation of the asset pair. An equity with 
+high volatility that is highly correlated to another equity will have a large 
+covariance with that equity, whereas uncorrelated equities will have a 
+covariance near zero. The covariance matrix is simply the correlation matrix 
+scaled by the volatilities of each asset pair.
+"""
+def covarianceCalculation(sigma, corr_matrix):
+    cov_matrix = np.outer(sigma, sigma) * corr_matrix
+    return cov_matrix
+
 
 if __name__=="__main__":
     main()
