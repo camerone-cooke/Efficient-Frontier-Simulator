@@ -13,6 +13,7 @@ allocations that maximize the return for a given level of risk.
 # import needed libraries
 import yfinance as yf
 import numpy as np
+import matplotlib.pyplot as plt
 
 TRADING_DAYS = 252
 SIMULATIONS = 10000
@@ -37,6 +38,7 @@ def main():
             cov_matrix,
             rf
             )
+        displayMCS(positions, randomized_weights, mcs_results)
 
 """
 Prompt user for positions in portfolio.
@@ -172,6 +174,24 @@ def monteCarloSimulation(positions, annualized_returns, cov_matrix, rf):
     mcs_results = np.column_stack([portfolio_return, volatility, sharpe])
 
     return randomized_weights, mcs_results
+
+"""
+This function generates the graphical display of the portfolio.
+"""
+def displayMCS(positions, randomized_weights, mcs_results):
+    # create new figure
+    fig = plt.figure(figsize=(15, 10))
+    # add title
+    fig.suptitle("Efficient Frontier Simulation", fontsize=22, weight='bold')
+
+    # adding axes to figure for display
+    top_left = fig.add_axes([0.06, 0.53, 0.40, 0.40])
+    top_left.axis('off')
+    bottom_left = fig.add_axes([0.06, 0.06, 0.40, 0.40])
+    top_right = fig.add_axes([0.56, 0.53, 0.40, 0.40])
+    bottom_right = fig.add_axes([0.56, 0.06, 0.40, 0.40])
+
+    plt.show()
 
 
 if __name__=="__main__":
