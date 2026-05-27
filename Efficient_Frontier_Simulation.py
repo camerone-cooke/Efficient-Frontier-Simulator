@@ -14,6 +14,7 @@ allocations that maximize the return for a given level of risk.
 import yfinance as yf
 import numpy as np
 import matplotlib.pyplot as plt
+import seaborn as sns
 
 TRADING_DAYS = 252
 SIMULATIONS = 100000
@@ -208,7 +209,16 @@ def displayMCS(positions, corr_matrix, cov_matrix, randomized_weights, mcs_resul
     )
 
     # display asset correlation matrix
-    
+    sns.heatmap(
+        corr_matrix, # heatmap of correlations
+        annot=True,
+        cmap='RdYlGn',
+        xticklabels=positions, # display tickers on x
+        yticklabels=positions, # display tickers on y
+        fmt=".2f", 
+        ax=top_right
+        )
+
 
     plt.show()
 
