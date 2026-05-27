@@ -25,6 +25,7 @@ def main():
         print("No positions given")
     else:
         historical_price_data = retrieveHistoricalData(positions)
+        annualized_return, cov_matrix = MCSInputs(historical_price_data)
 
 """
 Prompt user for positions in portfolio.
@@ -109,6 +110,18 @@ scaled by the volatilities of each asset pair.
 def covarianceCalculation(sigma, corr_matrix):
     cov_matrix = np.outer(sigma, sigma) * corr_matrix
     return cov_matrix
+
+"""
+This function calculates all needed inputs for Monte Carlo simulation.
+"""
+def MCSInputs(historical_price_data):
+    annualized_return = annualizedReturnCalculation(historical_price_data)
+    simple_returns = dailyReturnCalculation(historical_price_data)
+    sigma = volatilityCalculation(simple_returns)
+    corr_matrix = correlationCalculation(simple_returns)
+    cov_matrix = covarianceCalculation(sigma, corr_matrix)
+
+    return annualized_return, cov_matrix
 
 
 if __name__=="__main__":
