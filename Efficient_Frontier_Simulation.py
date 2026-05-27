@@ -192,11 +192,11 @@ def displayMCS(positions, corr_matrix, cov_matrix, randomized_weights, mcs_resul
     fig.suptitle("Efficient Frontier Simulation", fontsize=22, weight='bold')
 
     # adding axes to figure for display
-    top_left = fig.add_axes([0.06, 0.53, 0.40, 0.40])
+    top_left = fig.add_axes([0.08, 0.52, 0.38, 0.38])
     top_left.axis('off')
-    bottom_left = fig.add_axes([0.06, 0.06, 0.40, 0.40])
-    top_right = fig.add_axes([0.56, 0.53, 0.40, 0.40])
-    bottom_right = fig.add_axes([0.56, 0.06, 0.40, 0.40])
+    bottom_left = fig.add_axes([0.08, 0.06, 0.38, 0.38])
+    top_right = fig.add_axes([0.58, 0.52, 0.38, 0.38])
+    bottom_right = fig.add_axes([0.58, 0.06, 0.38, 0.38])
 
     # displaying efficient frontier
     scatter = bottom_left.scatter(
@@ -207,6 +207,9 @@ def displayMCS(positions, corr_matrix, cov_matrix, randomized_weights, mcs_resul
         alpha=0.5,
         s=10
     )
+    bottom_left.set_title("Efficient Frontier of Portfolios", fontsize=14)
+    bottom_left.set_xlabel("Volatility")
+    bottom_left.set_ylabel("Return")
 
     # display asset correlation matrix
     sns.heatmap(
@@ -218,6 +221,7 @@ def displayMCS(positions, corr_matrix, cov_matrix, randomized_weights, mcs_resul
         fmt=".2f", 
         ax=top_right
         )
+    top_right.set_title("Correlation Matrix", fontsize=14)
     
     # display asset covariance matrix
     sns.heatmap(
@@ -229,6 +233,7 @@ def displayMCS(positions, corr_matrix, cov_matrix, randomized_weights, mcs_resul
         fmt=".2f", 
         ax=bottom_right
         )
+    bottom_right.set_title("Covariance Matrix", fontsize=14)
 
     plt.show()
 
