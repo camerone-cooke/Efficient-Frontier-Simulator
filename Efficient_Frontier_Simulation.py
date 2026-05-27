@@ -205,12 +205,12 @@ def displayMCS(positions, corr_matrix, cov_matrix, randomized_weights, mcs_resul
         mcs_results[:, 0], # return on y-axis
         c = mcs_results[:, 2], # color by sharpe ratio
         cmap='viridis',
-        alpha=0.5,
         s=10
     )
     bottom_left.set_title("Efficient Frontier of Portfolios", fontsize=14)
     bottom_left.set_xlabel("Volatility")
     bottom_left.set_ylabel("Return")
+    plt.colorbar(scatter, ax=bottom_left)
 
     # add label for highest sharpe portfolio text box
     top_left.text(0.10, 1, "Highest Sharpe", fontsize=14)
