@@ -201,7 +201,7 @@ def displayMCS(positions, corr_matrix, cov_matrix, randomized_weights, mcs_resul
     # adding axes to figure for display
     top_left = fig.add_axes([0.08, 0.52, 0.38, 0.38])
     top_left.axis('off')
-    bottom_left = fig.add_axes([0.08, 0.06, 0.38, 0.38])
+    bottom_left = fig.add_axes([0.08, 0.06, 0.48, 0.38])
     top_right = fig.add_axes([0.58, 0.52, 0.38, 0.38])
     bottom_right = fig.add_axes([0.58, 0.06, 0.38, 0.38])
 
@@ -218,6 +218,8 @@ def displayMCS(positions, corr_matrix, cov_matrix, randomized_weights, mcs_resul
     bottom_left.set_ylabel("Return")
     plt.colorbar(scatter, ax=bottom_left)
 
+    rgb = 0
+    greyDelta = 0.75 / len(positions)
     # getting single position portfolios to mark on efficient frontier
     for p in range(0, len(positions)):
         # get index of portfolio with full allocation of each position
@@ -225,26 +227,27 @@ def displayMCS(positions, corr_matrix, cov_matrix, randomized_weights, mcs_resul
         bottom_left.scatter(
             mcs_results[index_single_position_port, 1],
             mcs_results[index_single_position_port, 0],
-            marker='x',
-            color='black',
-            s=50,
+            marker='X',
+            color=(rgb, rgb, rgb),
+            s=75,
             zorder=5,
             label=positions[p]
             )
+        rgb += greyDelta
         
     # marking equal weight portfolio on efficient frontier
     bottom_left.scatter(
         mcs_results[0, 1],
         mcs_results[0, 0],
         marker='s',
-        color='black',
+        color='#8D6E63',
         s=75,
         zorder=5,
         label='Equal Weight'
         )
 
     # add label for highest sharpe portfolio text box
-    top_left.text(0.10, 1, "Highest Sharpe", fontsize=14)
+    top_left.text(0.10, 1, "Maximum Sharpe", fontsize=14)
 
     # add label for minimum variance portfolio text box
     top_left.text(0.60, 1, "Minimum Variance", fontsize=14)
@@ -275,7 +278,7 @@ def displayMCS(positions, corr_matrix, cov_matrix, randomized_weights, mcs_resul
         verticalalignment='top',
         horizontalalignment='left',
         color='black',
-        linespacing=1.5,
+        linespacing=1 + (1 / len(positions)),
         bbox=dict(facecolor='#FBE5D6', edgecolor='black', boxstyle='square')
         )
     # display highest sharpe portfolio on efficient frontier
@@ -283,7 +286,7 @@ def displayMCS(positions, corr_matrix, cov_matrix, randomized_weights, mcs_resul
         mcs_results[index_highest_sharpe, 1],
         mcs_results[index_highest_sharpe, 0],
         marker='*',
-        color='black',
+        color='#D32F2F',
         s=75,
         zorder=5,
         label='Max Sharpe'
@@ -315,7 +318,7 @@ def displayMCS(positions, corr_matrix, cov_matrix, randomized_weights, mcs_resul
         verticalalignment='top',
         horizontalalignment='left',
         color='black',
-        linespacing=1.5,
+        linespacing=1 + (1 / len(positions)),
         bbox=dict(facecolor='#FBE5D6', edgecolor='black', boxstyle='square')
         )
     # display minimum variance portfolio on efficient frontier
@@ -323,7 +326,7 @@ def displayMCS(positions, corr_matrix, cov_matrix, randomized_weights, mcs_resul
         mcs_results[index_min_variance, 1],
         mcs_results[index_min_variance, 0],
         marker='D',
-        color='black',
+        color='#1976D2',
         s=50,
         zorder=5,
         label='Min Variance'
