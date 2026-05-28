@@ -310,7 +310,7 @@ def displayMCS(positions, corr_matrix, cov_matrix, rf, randomized_weights, mcs_r
         mcs_results[index_highest_sharpe, 0],
         marker='*',
         color='#D32F2F',
-        s=75,
+        s=85,
         zorder=5,
         label='Max Sharpe Portfolio'
         )
@@ -414,7 +414,6 @@ def displayMCS(positions, corr_matrix, cov_matrix, rf, randomized_weights, mcs_r
         selected_portfolio.annotation.set_color('black')
 
     bottom_left.legend(fontsize=8, markerscale=0.6)
-    plt.tight_layout()
     plt.show()
 
 
