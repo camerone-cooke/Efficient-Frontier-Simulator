@@ -171,6 +171,13 @@ def monteCarloSimulation(positions, annualized_returns, cov_matrix, rf):
     # adding single position portfolios
     single_position_ports = np.identity(len(positions))
     randomized_weights = np.vstack([single_position_ports, randomized_weights])
+    # adding equal weight portfolio
+    equal_weight_port = np.array([
+        1/len(positions), 
+        1/len(positions), 
+        1/len(positions)
+        ])
+    randomized_weights = np.vstack([equal_weight_port, randomized_weights])
 
     # calculate the return by weighting the annualized returns of each position
     portfolio_return = randomized_weights @ np.array(annualized_returns)
@@ -228,6 +235,17 @@ def displayMCS(positions, corr_matrix, cov_matrix, randomized_weights, mcs_resul
             zorder=5,
             label=positions[p]
             )
+        
+    # marking equal weight portfolio on efficient frontier
+    bottom_left.scatter(
+        mcs_results[0, 1],
+        mcs_results[0, 0],
+        marker='s',
+        color='black',
+        s=75,
+        zorder=5,
+        label='Equal Weight'
+        )
 
     # add label for highest sharpe portfolio text box
     top_left.text(0.10, 1, "Highest Sharpe", fontsize=14)
