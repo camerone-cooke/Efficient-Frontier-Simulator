@@ -224,12 +224,10 @@ def displayMCS(positions, corr_matrix, cov_matrix, randomized_weights, mcs_resul
             mcs_results[index_single_position_port, 0],
             marker='x',
             color='black',
-            s=75,
+            s=50,
             zorder=5,
             label=positions[p]
             )
-        
-    bottom_left.legend(fontsize=8, markerscale=0.6)
 
     # add label for highest sharpe portfolio text box
     top_left.text(0.10, 1, "Highest Sharpe", fontsize=14)
@@ -274,7 +272,7 @@ def displayMCS(positions, corr_matrix, cov_matrix, randomized_weights, mcs_resul
         color='black',
         s=75,
         zorder=5,
-        label=positions[p]
+        label='Max Sharpe'
         )
 
     # display portfolio with lowest variance and its metrics
@@ -305,6 +303,16 @@ def displayMCS(positions, corr_matrix, cov_matrix, randomized_weights, mcs_resul
         color='black',
         linespacing=1.5,
         bbox=dict(facecolor='#FBE5D6', edgecolor='black', boxstyle='square')
+        )
+    # display minimum variance portfolio on efficient frontier
+    bottom_left.scatter(
+        mcs_results[index_min_variance, 1],
+        mcs_results[index_min_variance, 0],
+        marker='D',
+        color='black',
+        s=50,
+        zorder=5,
+        label='Min Variance'
         )
 
     # display asset correlation matrix
@@ -366,6 +374,7 @@ def displayMCS(positions, corr_matrix, cov_matrix, randomized_weights, mcs_resul
         # format annotation text
         selected_portfolio.annotation.set_color('black')
 
+    bottom_left.legend(fontsize=8, markerscale=0.6)
     plt.tight_layout()
     plt.show()
 
