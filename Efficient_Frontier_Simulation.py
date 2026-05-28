@@ -172,11 +172,7 @@ def monteCarloSimulation(positions, annualized_returns, cov_matrix, rf):
     single_position_ports = np.identity(len(positions))
     randomized_weights = np.vstack([single_position_ports, randomized_weights])
     # adding equal weight portfolio
-    equal_weight_port = np.array([
-        1/len(positions), 
-        1/len(positions), 
-        1/len(positions)
-        ])
+    equal_weight_port = np.full(len(positions), 1 / len(positions))
     randomized_weights = np.vstack([equal_weight_port, randomized_weights])
 
     # calculate the return by weighting the annualized returns of each position
