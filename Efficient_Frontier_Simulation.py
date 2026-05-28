@@ -168,6 +168,9 @@ def monteCarloSimulation(positions, annualized_returns, cov_matrix, rf):
     weight_sums = np.sum(random_nums, axis=1)
     # divide each random number by the sum of the simulation to get the weight
     randomized_weights = random_nums / weight_sums.reshape(SIMULATIONS, 1)
+    # adding single position portfolios
+    single_position_ports = np.identity(len(positions))
+    randomized_weights = np.vstack([single_position_ports, randomized_weights])
 
     # calculate the return by weighting the annualized returns of each position
     portfolio_return = randomized_weights @ np.array(annualized_returns)
@@ -211,6 +214,22 @@ def displayMCS(positions, corr_matrix, cov_matrix, randomized_weights, mcs_resul
     bottom_left.set_xlabel("Volatility")
     bottom_left.set_ylabel("Return")
     plt.colorbar(scatter, ax=bottom_left)
+
+    # getting single position portfolios to mark on efficient frontier
+    for p in range(0, len(positions)):
+        # get index of portfolio with full allocation of each position
+        index_single_position_port = np.argmax(randomized_weights[:, p])
+        bottom_left.scatter(
+            mcs_results[index_single_position_port, 1],
+            mcs_results[index_single_position_port, 0],
+            marker='*',
+            color='black',
+            s=75,
+            zorder=5,
+            label=positions[p]
+            )
+        
+    bottom_left.legend(fontsize=8, markerscale=0.6)
 
     # add label for highest sharpe portfolio text box
     top_left.text(0.10, 1, "Highest Sharpe", fontsize=14)
@@ -337,6 +356,7 @@ def displayMCS(positions, corr_matrix, cov_matrix, randomized_weights, mcs_resul
         # format annotation text
         selected_portfolio.annotation.set_color('black')
 
+    plt.tight_layout()
     plt.show()
 
 
