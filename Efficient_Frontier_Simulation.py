@@ -222,7 +222,7 @@ def displayMCS(positions, corr_matrix, cov_matrix, randomized_weights, mcs_resul
         bottom_left.scatter(
             mcs_results[index_single_position_port, 1],
             mcs_results[index_single_position_port, 0],
-            marker='*',
+            marker='x',
             color='black',
             s=75,
             zorder=5,
@@ -265,6 +265,16 @@ def displayMCS(positions, corr_matrix, cov_matrix, randomized_weights, mcs_resul
         color='black',
         linespacing=1.5,
         bbox=dict(facecolor='#FBE5D6', edgecolor='black', boxstyle='square')
+        )
+    # display highest sharpe portfolio on efficient frontier
+    bottom_left.scatter(
+        mcs_results[index_highest_sharpe, 1],
+        mcs_results[index_highest_sharpe, 0],
+        marker='*',
+        color='black',
+        s=75,
+        zorder=5,
+        label=positions[p]
         )
 
     # display portfolio with lowest variance and its metrics
