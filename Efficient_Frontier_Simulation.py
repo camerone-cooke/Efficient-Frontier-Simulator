@@ -43,7 +43,8 @@ def main():
         displayMCS(
             positions, 
             corr_matrix, 
-            cov_matrix, 
+            cov_matrix,
+            rf, 
             randomized_weights, 
             mcs_results
             )
@@ -192,7 +193,7 @@ def monteCarloSimulation(positions, annualized_returns, cov_matrix, rf):
 """
 This function generates the graphical display of the portfolio.
 """
-def displayMCS(positions, corr_matrix, cov_matrix, randomized_weights, mcs_results):
+def displayMCS(positions, corr_matrix, cov_matrix, rf, randomized_weights, mcs_results):
     # create new figure
     fig = plt.figure(figsize=(15, 10))
     # add title
@@ -211,15 +212,13 @@ def displayMCS(positions, corr_matrix, cov_matrix, randomized_weights, mcs_resul
         mcs_results[:, 0], # return on y-axis
         c = mcs_results[:, 2], # color by sharpe ratio
         cmap='viridis',
-        s=10
+        s=3
     )
     bottom_left.set_title("Efficient Frontier of Portfolios", fontsize=14)
     bottom_left.set_xlabel("Volatility")
     bottom_left.set_ylabel("Return")
     plt.colorbar(scatter, ax=bottom_left)
 
-    rgb = 0
-    greyDelta = 0.75 / len(positions)
     # getting single position portfolios to mark on efficient frontier
     for p in range(0, len(positions)):
         # get index of portfolio with full allocation of each position
@@ -228,12 +227,11 @@ def displayMCS(positions, corr_matrix, cov_matrix, randomized_weights, mcs_resul
             mcs_results[index_single_position_port, 1],
             mcs_results[index_single_position_port, 0],
             marker='X',
-            color=(rgb, rgb, rgb),
+            color='black',
             s=75,
             zorder=5,
-            label=positions[p]
+            label='Single Position Portfolios' if p == 0 else "_nolegend_"
             )
-        rgb += greyDelta
         
     # marking equal weight portfolio on efficient frontier
     bottom_left.scatter(
@@ -243,7 +241,7 @@ def displayMCS(positions, corr_matrix, cov_matrix, randomized_weights, mcs_resul
         color='#8D6E63',
         s=75,
         zorder=5,
-        label='Equal Weight'
+        label='Equal Weight Portfolio'
         )
 
     # add label for highest sharpe portfolio text box
@@ -281,20 +279,44 @@ def displayMCS(positions, corr_matrix, cov_matrix, randomized_weights, mcs_resul
         linespacing=1 + (1 / len(positions)),
         bbox=dict(facecolor='#FBE5D6', edgecolor='black', boxstyle='square')
         )
+    
+    # set up Capital Market Line (CML) inputs
+    # calculate slope of CML
+    cml_slope = ((mcs_results[index_highest_sharpe, 0] - rf) 
+                 / mcs_results[index_highest_sharpe, 1])
+    # get start x and y
+    index_min_variance = np.argmin(mcs_results[:, 1])
+    min_variance_return = mcs_results[index_min_variance, 0]
+    min_x_val = (min_variance_return - rf) / cml_slope
+    # get end x and y
+    maximum_volatility = np.max(mcs_results[:, 1])
+    max_y_val = cml_slope * maximum_volatility + rf
+    # store starting and ending x, y vals
+    x_vals = [min_x_val, maximum_volatility]
+    y_vals = [min_variance_return, max_y_val]
+
+    # display CML
+    bottom_left.plot(
+        x_vals, 
+        y_vals, 
+        color='#9E1B1B', 
+        linewidth=2, 
+        label='Capital Market Line'
+        )
+
     # display highest sharpe portfolio on efficient frontier
     bottom_left.scatter(
         mcs_results[index_highest_sharpe, 1],
         mcs_results[index_highest_sharpe, 0],
         marker='*',
         color='#D32F2F',
-        s=75,
+        s=85,
         zorder=5,
-        label='Max Sharpe'
+        label='Max Sharpe Portfolio'
         )
 
     # display portfolio with lowest variance and its metrics
     # get metrics of lowest variance portfolio
-    index_min_variance = np.argmin(mcs_results[:, 1])
     weights = randomized_weights[index_min_variance]
     portfolio_return = mcs_results[index_min_variance, 0]
     volatility = mcs_results[index_min_variance, 1]
@@ -329,7 +351,7 @@ def displayMCS(positions, corr_matrix, cov_matrix, randomized_weights, mcs_resul
         color='#1976D2',
         s=50,
         zorder=5,
-        label='Min Variance'
+        label='Min Variance Portfolio'
         )
 
     # display asset correlation matrix
@@ -392,7 +414,6 @@ def displayMCS(positions, corr_matrix, cov_matrix, randomized_weights, mcs_resul
         selected_portfolio.annotation.set_color('black')
 
     bottom_left.legend(fontsize=8, markerscale=0.6)
-    plt.tight_layout()
     plt.show()
 
 
