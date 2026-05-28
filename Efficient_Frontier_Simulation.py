@@ -43,7 +43,8 @@ def main():
         displayMCS(
             positions, 
             corr_matrix, 
-            cov_matrix, 
+            cov_matrix,
+            rf, 
             randomized_weights, 
             mcs_results
             )
@@ -192,7 +193,7 @@ def monteCarloSimulation(positions, annualized_returns, cov_matrix, rf):
 """
 This function generates the graphical display of the portfolio.
 """
-def displayMCS(positions, corr_matrix, cov_matrix, randomized_weights, mcs_results):
+def displayMCS(positions, corr_matrix, cov_matrix, rf, randomized_weights, mcs_results):
     # create new figure
     fig = plt.figure(figsize=(15, 10))
     # add title
@@ -211,7 +212,7 @@ def displayMCS(positions, corr_matrix, cov_matrix, randomized_weights, mcs_resul
         mcs_results[:, 0], # return on y-axis
         c = mcs_results[:, 2], # color by sharpe ratio
         cmap='viridis',
-        s=10
+        s=3
     )
     bottom_left.set_title("Efficient Frontier of Portfolios", fontsize=14)
     bottom_left.set_xlabel("Volatility")
@@ -281,6 +282,31 @@ def displayMCS(positions, corr_matrix, cov_matrix, randomized_weights, mcs_resul
         linespacing=1 + (1 / len(positions)),
         bbox=dict(facecolor='#FBE5D6', edgecolor='black', boxstyle='square')
         )
+    
+    # set up Capital Market Line (CML) inputs
+    # calculate slope of CML
+    cml_slope = ((mcs_results[index_highest_sharpe, 0] - rf) 
+                 / mcs_results[index_highest_sharpe, 1])
+    # get start x and y
+    index_min_variance = np.argmin(mcs_results[:, 1])
+    min_variance_return = mcs_results[index_min_variance, 0]
+    min_x_val = (min_variance_return - rf) / cml_slope
+    # get end x and y
+    maximum_volatility = np.max(mcs_results[:, 1])
+    max_y_val = cml_slope * maximum_volatility + rf
+    # store starting and ending x, y vals
+    x_vals = [min_x_val, maximum_volatility]
+    y_vals = [min_variance_return, max_y_val]
+
+    # display CML
+    bottom_left.plot(
+        x_vals, 
+        y_vals, 
+        color='#9E1B1B', 
+        linewidth=2, 
+        label='Capital Market Line'
+        )
+
     # display highest sharpe portfolio on efficient frontier
     bottom_left.scatter(
         mcs_results[index_highest_sharpe, 1],
@@ -294,7 +320,6 @@ def displayMCS(positions, corr_matrix, cov_matrix, randomized_weights, mcs_resul
 
     # display portfolio with lowest variance and its metrics
     # get metrics of lowest variance portfolio
-    index_min_variance = np.argmin(mcs_results[:, 1])
     weights = randomized_weights[index_min_variance]
     portfolio_return = mcs_results[index_min_variance, 0]
     volatility = mcs_results[index_min_variance, 1]
