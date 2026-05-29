@@ -141,3 +141,43 @@ NumPy in order to achieve greater efficiency bypasses this process through two m
 ---
 
 ## Dashboard and Graphical Output
+
+Upon execution, the program generates a interactive, visual dashboard of the simulation results:
+- A display of the correlation and covariance heatmaps, detailing the interactions between assets
+- A graphical rendition of the Efficient Frontier including the Capital Market Line
+- A breakdown of the Maximum Sharpe Ratio and Minimum Variance portfolios, along with their relevant metrics
+
+### Example Output
+
+Portfolio specified for results:
+- Tickers: AAPL, XOM, JPM
+- Number of Simulations: 100,000
+
+![Efficient Frontier Simulation Output](https://github.com/camerone-cooke/Efficient-Frontier-Simulator/blob/main/Efficient_Frontier_Simulator_Output.png)
+
+#### Metrics of Notable Portfolios Generated:
+
+Maximum Sharpe Ratio Portfolio
+- Return: 27.54%
+- Volatility: 25.35%
+- Sharpe: 0.91
+
+- Position Weights:
+  * AAPL: 75.93%
+  * XOM: 24.05%
+  * JPM: 0.02%
+
+Minimum Variance Portfolio
+- Return: 19.93%
+- Volatility: 21.76%
+- Sharpe: 0.71
+
+- Position Weights:
+  * AAPL: 35.73%
+  * XOM: 29.42%
+  * JPM: 34.85%
+
+
+
+
+
