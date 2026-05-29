@@ -222,6 +222,32 @@ The heatmaps in the two right quadrants show the correlation matrix (top right) 
  
 ---
 
+## How to Run
+
+Install Dependencies:
+```bash
+pip install yfinance numpy matplotlib seaborn mplcursors
+```
+
+Run Script:
+```bash
+# For Mac or Linux
+python3 Efficient_Frontier_Simulation.py
+
+# For Windows
+python Efficient_Frontier_Simulation.py
+```
+
+Enter Equity Positions:
+```text
+What Equity's price would you like to simulate? or 'quit' to stop: AAPL
+What Equity's price would you like to simulate? or 'quit' to stop: MSFT
+What Equity's price would you like to simulate? or 'quit' to stop: NVDA
+What Equity's price would you like to simulate? or 'quit' to stop: quit
+```
+
+---
+
 ## Skills Demonstrated
 
 This project demonstrates:
