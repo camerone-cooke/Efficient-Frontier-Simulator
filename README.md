@@ -208,3 +208,14 @@ The heatmaps in the two right quadrants show the correlation matrix (top right) 
 - Interactive Display: Implements `mplcursors` which allow users to inspect asset weights, return, and volatility of any of the 100,000+ portfolios when hovering their mouse over the plotted point.
 - Matrix Heatmaps: Inclusion of correlation and covariance heatmaps allows comparison of correlations and joint volatility between the asset pairs. Gives user insight into the true diversification of the portfolio.
 
+---
+
+## Tech Stack & Libraries
+
+- Language: Python 3.12.5
+- Libraries
+  * `yfinance` - For dynamically fetching historical market data and asset information
+  * `numpy` - For vectorized operations on multi-dimension arrays
+  * `matplotlib` - For constructing multi-panel display used for visualizing data
+  * `mplcursors` - For enabling interactive, inspections of portfolios by hovering mouse over point
+  * `seaborn` - For rendering color-coded correlation and covariance heatmaps
