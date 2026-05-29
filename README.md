@@ -202,5 +202,9 @@ The heatmaps in the two right quadrants show the correlation matrix (top right) 
 
 ## Key Features
 
-
+- Historical Data: Live market data is fetched dynamically via the yfinance library, automating data collection for simulation.
+- Capital Market Line Inclusion: Renders CML tangent line, extending through the Maximum Sharpe Ratio portfolio, to illustrate the theoretical boundary of optimal allocation of portfolio capital
+- Optimized Code: Uses `yf.download` to take advantage of multi-threading for pulling historical data of entire basket of equities concurrently, and replaces standard Python loops with vectorized operations to improve efficiency.
+- Interactive Display: Implements `mplcursors` which allow users to inspect asset weights, return, and volatility of any of the 100,000+ portfolios when hovering their mouse over the plotted point.
+- Matrix Heatmaps: Inclusion of correlation and covariance heatmaps allows comparison of correlations and joint volatility between the asset pairs. Gives user insight into the true diversification of the portfolio.
 
