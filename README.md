@@ -52,6 +52,16 @@ Where:
 - $S_{\text{start}}$ = The initial price of an equity
 - $t$ = The time horizon as total trading days over trading days in a year
 
+### Historical Volatility Using Simple Returns
+
+#### What is Historical Volatility?
+
+Volatility is the measure of the variance in retruns of a given asset. It is used to represent the risk that is carried by an investment. Volatility in this porject is calculated by annualizing the standard deviation of daily simple returns. 
+
+#### Why Use Simple Returns?
+
+Simple returns are used due to maintaining the geometric nature of the equities in the portfolio. If log returns were taken, the portfolio math for determining return or volatility would not work due to log returns not being additive across a portfolio. Simple returns work because they are additive across asset weights. 
+
 
 
 
