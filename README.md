@@ -198,6 +198,9 @@ A hovering box is also shown, displaying a breakdown of any portfolios that the 
 
 The heatmaps in the two right quadrants show the correlation matrix (top right) and the covariance matrix (bottom right). The correlation matrix is colored based on correlation coefficients and helps to visualize the correlations between asset pairs. The colors range from green (positive correlation) to red (negative or low correlation). The covariance matrix is colored based on the correlated variance of the two assets and displays the joint variability of the asset pair. The colors range from red (high covariance) to blue (low covariance). 
 
+---
+
+## Key Features
 
 
 
