@@ -133,16 +133,16 @@ In Python, everything is an object. This means that to perform math on a list of
 NumPy in order to achieve greater efficiency bypasses this process through two main methods:
 
 1) Usage of Homogeneous Contiguous Memory
-   Unlike a list in Python that points to objects spread around memory and can contain different data types, NumPy arrays force all data types to be exactly the same (homogeneous) and stores the contents of the array in contiguous memory, meaning they are stored next to each other instead of all over the place. Knowing that each element is identical in size and type is a massive advantage due to not having to check at runtime.
+   - Unlike a list in Python that points to objects spread around memory and can contain different data types, NumPy arrays force all data types to be exactly the same (homogeneous) and stores the contents of the array in contiguous memory, meaning they are stored next to each other instead of all over the place. Knowing that each element is identical in size and type is a massive advantage due to not having to check at runtime.
    
 2) Usage of C and SIMD Operations
-   With the data identical in regards to size and type, and organized in contiguous blocks of memory, NumPy is able to hand off the array to pre-compiled, optimized C libraries. Instead of processing the elements sequentially like a standard Python loop, underlying hardware leverages SIMD (Single Instruction, Multiple Data) operations. This allows the CPU to apply a single mathematical instruction to an entire vector of data simultaneously, increasing efficiency and cutting down on execution time.
+   - With the data identical in regards to size and type, and organized in contiguous blocks of memory, NumPy is able to hand off the array to pre-compiled, optimized C libraries. Instead of processing the elements sequentially like a standard Python loop, underlying hardware leverages SIMD (Single Instruction, Multiple Data) operations. This allows the CPU to apply a single mathematical instruction to an entire vector of data simultaneously, increasing efficiency and cutting down on execution time.
 
 ---
 
 ## Dashboard and Graphical Output
 
-Upon execution, the program generates a interactive, visual dashboard of the simulation results:
+Upon execution, the program generates an interactive, visual dashboard of the simulation results:
 - A display of the correlation and covariance heatmaps, detailing the interactions between assets
 - A graphical rendition of the Efficient Frontier including the Capital Market Line
 - A breakdown of the Maximum Sharpe Ratio and Minimum Variance portfolios, along with their relevant metrics
@@ -177,6 +177,26 @@ Minimum Variance Portfolio
   * XOM: 29.42%
   * JPM: 34.85%
 
+### Understanding Output
+
+#### Top Left
+
+The two boxes in the top left quadrant of the visual display give breakdowns of the two most important portfolios determined by simulating the Efficient Frontier. The left breakdown shows the Maximum Sharpe Ratio portfolio, the portfolio that has the highest return per unit of risk. The right breakdown shows the Minimum Variance portfolio, the portfolio that has the lowest volatility and therefore is the least risky. The breakdowns include the return, volatility, Sharpe ratio, and position weights of that portfolio.
+
+#### Bottom Left
+
+The graph in the bottom left quadrant of the visual display is an interactive scatter plot mapping all 100,000+ simulated portfolios to a coordinate plane, color coded by their Sharpe ratios. The display includes a red line that runs tangent to the Efficient Frontier at the Maximum Sharpe Portfolio, this is the Capital Market Line. Key portfolio compositions are marked with different indicators listed below:
+
+- Red Star for the Maximum Sharpe Ratio portfolio
+- Blue Diamond for the Minimum Variance portfolio
+- Brown Square for the equal weight portfolio
+- Black Xs for individual equity portfolios
+  
+A hovering box is also shown, displaying a breakdown of any portfolios that the user highlights with their mouse. This shows the portfolio's metrics (return, volatility, and Sharpe ratio), as well as the position allocations for that portfolio.
+
+#### Top and Bottom Right
+
+The heatmaps in the two right quadrants show the correlation matrix (top right) and the covariance matrix (bottom right). The correlation matrix is colored based on correlation coefficients and helps to visualize the correlations between asset pairs. The colors range from green (positive correlation) to red (negative or low correlation). The covariance matrix is colored based on the correlated variance of the two assets and displays the joint variability of the asset pair. The colors range from red (high covariance) to blue (low covariance). 
 
 
 
