@@ -105,6 +105,7 @@ The CML touches the Efficient Frontier at only one point which is the Maximum Sh
 
 To the left of the tangency point with the Efficient Frontier (the Maximum Sharpe Ratio portfolio), portfolios along the CML are able to generate better risk-adjusted returns due to a portion of the portfolio being allocated to the risk free asset (lending capital), reducing the risk taken on to a level less than that of equities. To the right of the tangency point, investors may borrow money at the risk free rate to purchase more of the Maximum Sharpe Ratio Portfolio on margin to produce greater risk-adjusted returns.
 
+---
 
-
+## Optimization
 
