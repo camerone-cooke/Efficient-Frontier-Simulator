@@ -138,4 +138,6 @@ NumPy in order to achieve greater efficiency bypasses this process through two m
 2) Usage of C and SIMD Operations
    With the data identical in regards to size and type, and organized in contiguous blocks of memory, NumPy is able to hand off the array to pre-compiled, optimized C libraries. Instead of processing the elements sequentially like a standard Python loop, underlying hardware leverages SIMD (Single Instruction, Multiple Data) operations. This allows the CPU to apply a single mathematical instruction to an entire vector of data simultaneously, increasing efficiency and cutting down on execution time.
 
-   
+---
+
+## Dashboard and Graphical Output
