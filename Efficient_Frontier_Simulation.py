@@ -25,22 +25,22 @@ Check if number of positions is valid and then run simulation on portfolio.
 """
 def main():
     # get positions in portfolio from user
-    positions = getPortfolio()
+    positions = get_portfolio()
 
     # catch if there is no positions given
     if (len(positions) < 1):
         print("No positions given")
     else:
         # get historical data and run simulation
-        historical_price_data = retrieveHistoricalData(positions)
-        annualized_returns, corr_matrix, cov_matrix, rf = MCSInputs(historical_price_data)
-        randomized_weights, mcs_results = monteCarloSimulation(
+        historical_price_data = retrieve_historical_data(positions)
+        annualized_returns, corr_matrix, cov_matrix, rf = mcs_inputs(historical_price_data)
+        randomized_weights, mcs_results = monte_carlo_simulation(
             positions, 
             annualized_returns, 
             cov_matrix,
             rf
             )
-        displayMCS(
+        mcs_display(
             positions, 
             corr_matrix, 
             cov_matrix,
@@ -52,7 +52,7 @@ def main():
 """
 Prompt user for positions in portfolio.
 """
-def getPortfolio():
+def get_portfolio():
     positions = np.array([])
 
     # prompt user for ticker
@@ -71,7 +71,7 @@ def getPortfolio():
 """
 Retrieves historical data from positions in portfolio.
 """
-def retrieveHistoricalData(positions):
+def retrieve_historical_data(positions):
     # use yf.download instead of yf.Ticker (for a single ticker) or yf.Tickers 
     # (for multiple tickers) due to being more efficient (uses multi-threading)
 
@@ -87,7 +87,7 @@ def retrieveHistoricalData(positions):
 """
 Calculates the daily return of each position
 """
-def dailyReturnCalculation(historical_price_data):
+def daily_return_calculation(historical_price_data):
     # calculate simple returns for each day and clean (first day will be NaN)
     simple_returns = (historical_price_data / historical_price_data.shift(1)) - 1
     cleaned_returns = simple_returns.dropna()
@@ -97,7 +97,7 @@ def dailyReturnCalculation(historical_price_data):
 Calculates the annualized return of each position. This is calculated by taking
 the 10 year compound annual growth rate (CAGR).
 """
-def annualizedReturnCalculation(historical_price_data):
+def annualized_return_calculation(historical_price_data):
     # calculate the change and the factor, return annualized returns
     change = (historical_price_data.iloc[-1] / historical_price_data.iloc[0])
     annualization_factor = (1 / ((len(historical_price_data) - 1) / TRADING_DAYS))
@@ -107,7 +107,7 @@ def annualizedReturnCalculation(historical_price_data):
 """
 Calculates the annualized volatility of each position.
 """
-def volatilityCalculation(simple_returns):
+def volatility_calculation(simple_returns):
     # get the standard deviation of simple daily returns
     standard_deviation = simple_returns.std()
 
@@ -122,7 +122,7 @@ another. Their correlation value can range from -1.0 (inversely correlated) to
 simple returns of each equity in the portfolio and computing the pairwise
 correlation coefficients between all equity pairs.
 """
-def correlationCalculation(simple_returns):
+def correlation_calculation(simple_returns):
     # calculate the correlation of each asset pair
     corr_matrix = np.array(simple_returns.corr())
     return corr_matrix
@@ -135,7 +135,7 @@ covariance with that equity, whereas uncorrelated equities will have a
 covariance near zero. The covariance matrix is simply the correlation matrix 
 scaled by the volatilities of each asset pair.
 """
-def covarianceCalculation(sigma, corr_matrix):
+def covariance_calculation(sigma, corr_matrix):
     # multiply the correlation matrix by the vector of volatilities
     cov_matrix = np.outer(sigma, sigma) * corr_matrix
     return cov_matrix
@@ -143,12 +143,12 @@ def covarianceCalculation(sigma, corr_matrix):
 """
 This function calculates all needed inputs for Monte Carlo simulation.
 """
-def MCSInputs(historical_price_data):
-    annualized_returns = annualizedReturnCalculation(historical_price_data)
-    simple_returns = dailyReturnCalculation(historical_price_data)
-    sigma = volatilityCalculation(simple_returns)
-    corr_matrix = correlationCalculation(simple_returns)
-    cov_matrix = covarianceCalculation(sigma, corr_matrix)
+def mcs_inputs(historical_price_data):
+    annualized_returns = annualized_return_calculation(historical_price_data)
+    simple_returns = daily_return_calculation(historical_price_data)
+    sigma = volatility_calculation(simple_returns)
+    corr_matrix = correlation_calculation(simple_returns)
+    cov_matrix = covariance_calculation(sigma, corr_matrix)
     rf = (yf.download("^TNX", period="5d", auto_adjust=True)["Close"].iloc[-1]) / 100
     rf = float(rf.iloc[0])
 
@@ -162,7 +162,7 @@ to make sure all capital is utilized and there are no short positions. The
 return, volatility, and Sharpe ratio of the portfolio are then calculated based
 on each weight combination.
 """
-def monteCarloSimulation(positions, annualized_returns, cov_matrix, rf):
+def monte_carlo_simulation(positions, annualized_returns, cov_matrix, rf):
     # create array to house randomly generated numbers
     random_nums = np.random.random((SIMULATIONS, len(positions)))
     # sum each simulations random numbers
@@ -193,7 +193,7 @@ def monteCarloSimulation(positions, annualized_returns, cov_matrix, rf):
 """
 This function generates the graphical display of the portfolio.
 """
-def displayMCS(positions, corr_matrix, cov_matrix, rf, randomized_weights, mcs_results):
+def mcs_display(positions, corr_matrix, cov_matrix, rf, randomized_weights, mcs_results):
     # create new figure
     fig = plt.figure(figsize=(15, 10))
     # add title
