@@ -109,3 +109,9 @@ To the left of the tangency point with the Efficient Frontier (the Maximum Sharp
 
 ## Optimization
 
+### Multi-Threaded Data Retrieval
+
+#### Using yf.download Instead of yf.Tickers
+
+When fetching historical data from Yahoo Finance via the yfinance library, `yf.download` is used instead of `yf.Tickers`. This is due to the improved abilities of the `yf.download` API call over the `yf.Tickers` call. Built into `yf.download` is the default use of multithreading, meaning the data for a list of tickers can be fetched concurrently through the use of multiple threads. This is instead of making multiple API calls and fetching the data for each ticker individually, which in some cases can lead to reaching Yahoo Finance's rate limit or being throttled and not receiving the data promptly, leading to efficiency loss. 
+
