@@ -224,5 +224,8 @@ The heatmaps in the two right quadrants show the correlation matrix (top right) 
 
 ## Skills Demonstrated
 
-
+This project demonstrates:
+- Quantitative Development: Applied Modern Portfolio Theory to simulate and explore the Efficient Frontier, calculate risk-adjusted returns, and generate the CML through modeling in Python.
+- Code Optimization: Utilized efficient API calls that take advantage of multi-threading for pulling historical data concurrently and replace standard loops with vectorized operations that improve efficiency.
+- Visual Interface Design: Designed multi-panel, interactive dashboard with simulation output visuals to explore portfolio construction possibilities.
 
