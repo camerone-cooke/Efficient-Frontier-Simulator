@@ -53,20 +53,20 @@ def main():
 Prompt user for positions in portfolio.
 """
 def get_portfolio():
-    positions = np.array([])
+    positions = []
 
     # prompt user for ticker
     ticker = input('What Equity\'s price would you like to simulate? '
                     'or \'quit\' to stop: ').upper()
     while (ticker != "QUIT"):
         # add ticker to positions and number of shares to shares
-        positions = np.append(positions, ticker)
+        positions.append(ticker)
 
         # re-prompt user for next ticker
         ticker = input('What Equity\'s price would you like to simulate? '
                     'or \'quit\' to stop: ').upper()
         
-    return positions
+    return np.array(positions)
 
 """
 Retrieves historical data from positions in portfolio.
