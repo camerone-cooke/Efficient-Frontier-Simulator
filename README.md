@@ -219,3 +219,10 @@ The heatmaps in the two right quadrants show the correlation matrix (top right) 
   * `matplotlib` - For constructing multi-panel display used for visualizing data
   * `mplcursors` - For enabling interactive, inspections of portfolios by hovering mouse over point
   * `seaborn` - For rendering color-coded correlation and covariance heatmaps
+ 
+---
+
+## Skills Demonstrated
+
+
+
