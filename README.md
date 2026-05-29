@@ -37,5 +37,23 @@ Monte Carlo simulation is a way to model the probability of different outcomes f
 
 In this project, Monte Carlo simulation is being used to generate hundreds of thousands of portfolios with differing position allocations. Utilizing a Monte Carlo simulation allows investors to better grasp the range of possible risk-return outcomes and identify optimal distributions of capital. This allows for the estimation of the Maximum Sharpe Ratio portfolio and the calculation of the Minimum Variance portfolio.
 
+### Annualized Return
+
+#### Annualized Return Using Compound Annual Growth Rate (CAGR)
+
+The Compound Annual Growth Rate (CAGR) measures the annual rate of return of an investment that is needed to get from the initial price of the asset to the ending price. The return resulting from CAGR is geometric in nature, mirroring the properties of equity growth by compounding over time. 
+
+The Compound Annual Growth Rate is calculated using:
+
+$$\text{CAGR} = \left( \frac{S_{\text{end}}}{S_{\text{start}}} \right)^{\frac{1}{\Delta t}} - 1$$
+
+Where:
+- $S_{\text{end}}$ = The ending price of an equity
+- $S_{\text{start}}$ = The initial price of an equity
+- $t$ = The time horizon as total trading days over trading days in a year
+
+
+
+
 
 
