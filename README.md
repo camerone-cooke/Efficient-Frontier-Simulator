@@ -115,3 +115,27 @@ To the left of the tangency point with the Efficient Frontier (the Maximum Sharp
 
 When fetching historical data from Yahoo Finance via the yfinance library, `yf.download` is used instead of `yf.Tickers`. This is due to the improved abilities of the `yf.download` API call over the `yf.Tickers` call. Built into `yf.download` is the default use of multithreading, meaning the data for a list of tickers can be fetched concurrently through the use of multiple threads. This is instead of making multiple API calls and fetching the data for each ticker individually, which in some cases can lead to reaching Yahoo Finance's rate limit or being throttled and not receiving the data promptly, leading to efficiency loss. 
 
+### Vectorization of Calculations
+
+#### Using NumPy Vectorization Capabilities
+
+A challenge with executing a Monte Carlo simulation exceeding 100,000 iterations is the time cost in doing so using standard python loops. To improve efficiency and speed up execution time of the program, this project minimizes the number of native Python loops used by replacing them with vectorized NumPy operations.
+
+#### How These Speeds are Reached
+
+To understand how these speeds are reached, two things have to be understood:
+
+- How standard Python loops work
+- What NumPy is actually doing
+
+In Python, everything is an object. This means that to perform math on a list of numbers, Python has to look at every element at runtime and determine what type of data it is, and then perform the correct mathematical operation for that data type. This process is known as Dynamic Typing and adds a lot of computational overhead.
+
+NumPy in order to achieve greater efficiency bypasses this process through two main methods:
+
+1) Usage of Homogeneous Contiguous Memory
+   Unlike a list in Python that points to objects spread around memory and can contain different data types, NumPy arrays force all data types to be exactly the same (homogeneous) and stores the contents of the array in contiguous memory, meaning they are stored next to each other instead of all over the place. Knowing that each element is identical in size and type is a massive advantage due to not having to check at runtime.
+   
+2) Usage of C and SIMD Operations
+   With the data identical in regards to size and type, and organized in contiguous blocks of memory, NumPy is able to hand off the array to pre-compiled, optimized C libraries. Instead of processing the elements sequentially like a standard Python loop, underlying hardware leverages SIMD (Single Instruction, Multiple Data) operations. This allows the CPU to apply a single mathematical instruction to an entire vector of data simultaneously, increasing efficiency and cutting down on execution time.
+
+   
