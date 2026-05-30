@@ -226,7 +226,7 @@ The heatmaps in the two right quadrants show the correlation matrix (top right) 
 
 Install Dependencies:
 ```bash
-pip install yfinance numpy matplotlib seaborn mplcursors
+pip install yfinance numpy matplotlib seaborn mplcursors time
 ```
 
 Run Script:
