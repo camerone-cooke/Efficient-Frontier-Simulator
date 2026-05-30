@@ -16,6 +16,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 import mplcursors
+import time
 
 TRADING_DAYS = 252
 SIMULATIONS = 100000
@@ -414,8 +415,10 @@ def mcs_display(positions, corr_matrix, cov_matrix, rf, randomized_weights, mcs_
         selected_portfolio.annotation.set_color('black')
 
     bottom_left.legend(fontsize=8, markerscale=0.6)
+    end = time.time()
+    print("Runtime: %.2f seconds" % (end - start))
     plt.show()
 
-
+start = time.time()
 if __name__=="__main__":
     main()
