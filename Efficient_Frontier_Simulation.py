@@ -63,7 +63,7 @@ def get_portfolio():
         ticker = input('What Equity\'s price would you like to simulate? '
                     'or \'quit\' to stop: ').upper()
         
-    return np.array(positions)
+    return positions
 
 """
 Retrieves historical data from positions in portfolio.
@@ -74,7 +74,7 @@ def retrieve_historical_data(positions):
 
     # retrieve data for all positions at one time and place in dataframe
     historical_price_data = yf.download(
-        positions.tolist(), 
+        positions, 
         period="10y", 
         auto_adjust=True
         )["Close"]
